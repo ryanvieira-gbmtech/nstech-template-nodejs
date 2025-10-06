@@ -12,7 +12,6 @@ import { MetricModule } from "./infra/prometheus/metric.module";
 import { ExampleModule } from "./modules/example/example.module";
 import { AuthModule } from "./shared/auth/auth.module";
 import { JwtAuthGuard } from "./shared/auth/jwt-auth.guard";
-import { SharedModule } from "./shared/shared.module";
 
 @Module({
   imports: [
@@ -32,7 +31,6 @@ import { SharedModule } from "./shared/shared.module";
     EnvModule,
     DatabaseModule,
     AuthModule,
-    SharedModule,
     ExampleModule,
   ],
   providers: [
