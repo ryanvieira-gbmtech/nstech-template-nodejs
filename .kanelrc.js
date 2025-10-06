@@ -13,14 +13,14 @@ module.exports = {
   connection: {
     connectionString: process.env.DATABASE_URL,
   },
-  schemas: ["public", "new_backoffice"],
+  schemas: ["public"],
   typeFilter: (t) => !["function", "procedure"].includes(t.kind),
   preDeleteOutputFolder: true,
   outputPath: "./src/infra/database/schema",
   preRenderHooks: [makeKyselyHook(), kyselyCamelCaseHook],
   postRenderHooks: [
     (path, lines, _) => {
-      const schemasToPrefix = ["new_backoffice"];
+      const schemasToPrefix = []; // muda o nome das props para "schema.prop" em vez de "prop"
 
       if (!path.endsWith("Schema.ts")) {
         return lines;
