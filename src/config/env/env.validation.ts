@@ -26,9 +26,6 @@ export class EnvironmentVariables {
   @IsString()
   JWT_SECRET!: string;
 
-  @IsString()
-  TOT_GUARD_URL!: string;
-
   @Equals("UTC")
   TZ!: "UTC";
 
