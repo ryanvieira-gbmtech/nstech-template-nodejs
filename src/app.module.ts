@@ -6,14 +6,12 @@ import { SentryModule } from "@sentry/nestjs/setup";
 import { PrometheusModule } from "@willsoto/nestjs-prometheus";
 import { EnvModule } from "./config/env/env.module";
 import { validate } from "./config/env/env.validation";
-import { ListenerModule } from "./events/listeners/listener.module";
 import { DatabaseModule } from "./infra/database/database.module";
 import { MetricController } from "./infra/prometheus/metric.controller";
 import { MetricModule } from "./infra/prometheus/metric.module";
 import { ExampleModule } from "./modules/example/example.module";
 import { AuthModule } from "./shared/auth/auth.module";
 import { JwtAuthGuard } from "./shared/auth/jwt-auth.guard";
-import { PermissionGuard } from "./shared/auth/require-permission.guard";
 import { SharedModule } from "./shared/shared.module";
 
 @Module({
@@ -34,7 +32,6 @@ import { SharedModule } from "./shared/shared.module";
     EnvModule,
     DatabaseModule,
     AuthModule,
-    ListenerModule,
     SharedModule,
     ExampleModule,
   ],
@@ -42,10 +39,6 @@ import { SharedModule } from "./shared/shared.module";
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: PermissionGuard,
     },
   ],
 })

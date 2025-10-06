@@ -7,8 +7,6 @@ import helmet from "helmet";
 import { MetricService } from "@/infra/prometheus/metric.service";
 import { AllExceptionsFilter } from "@/shared/filters/all-exceptions.filter";
 import { MetricInterceptor } from "@/shared/interceptors/metric.interceptor";
-import { ProfileValidationInterceptor } from "@/shared/interceptors/profile-validation.interceptor";
-import { ProfileValidationService } from "@/shared/services/profile-validation.service";
 
 export function configureSwagger(app: INestApplication) {
   app.use(
@@ -67,10 +65,7 @@ export function useGlobalFilters(app: INestApplication) {
 }
 
 export function setGlobalInterceptors(app: INestApplication) {
-  const profileValidationService = app.get<ProfileValidationService>(ProfileValidationService);
-
   app.useGlobalInterceptors(
-    new ProfileValidationInterceptor(profileValidationService),
     new MetricInterceptor(app.get(MetricService)),
     new ClassSerializerInterceptor(app.get(Reflector), {
       excludeExtraneousValues: true,
