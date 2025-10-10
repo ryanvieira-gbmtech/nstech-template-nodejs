@@ -4,7 +4,9 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
+  Put,
   Query,
   SerializeOptions,
 } from "@nestjs/common";
@@ -35,5 +37,12 @@ export class ExampleController {
   @HttpCode(HttpStatus.CREATED)
   async createProduct(@Body() data: CreateProductRequestDTO) {
     await this.exampleService.createProduct(data);
+  }
+
+  @Put(":hashId")
+  @ApiOperation({ summary: "Atualiza um produto" })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async updateProduct(@Param("hashId") hashId: string, @Body() data: CreateProductRequestDTO) {
+    await this.exampleService.updateProduct(hashId, data);
   }
 }

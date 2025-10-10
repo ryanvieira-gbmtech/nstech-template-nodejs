@@ -22,4 +22,10 @@ export class ExampleService {
       name: data.name,
     });
   }
+
+  async updateProduct(hashId: string, data: CreateProductRequestDTO) {
+    await this.productRepository.update(hashId, {
+      name: data.name,
+    });
+  }
 }

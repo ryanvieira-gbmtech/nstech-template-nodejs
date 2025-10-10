@@ -22,4 +22,12 @@ export class ProductRepository {
   async create(data: NewProduct) {
     return this.db.insertInto("product").values(data).returningAll().executeTakeFirstOrThrow();
   }
+
+  async update(hashId: string, data: Partial<NewProduct>) {
+    await this.db
+      .updateTable("product")
+      .set(data)
+      .where("externalId", "=", hashId)
+      .executeTakeFirstOrThrow();
+  }
 }
