@@ -14,8 +14,6 @@ export default defineConfig({
   },
   migrations: {
     migrationFolder: "src/infra/database/migrations",
-    migrationTableName: "kysely_nomedoprojeto_migrations",
-    migrationLockTableName: "kysely_nomedoprojeto_migrations_lock",
     migrationTableSchema: "migration",
     getMigrationPrefix: getKnexTimestampPrefix,
   },
