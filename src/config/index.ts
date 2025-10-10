@@ -1,7 +1,6 @@
 import { ClassSerializerInterceptor, INestApplication } from "@nestjs/common";
 import { HttpAdapterHost, Reflector } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { apiReference } from "@scalar/nestjs-api-reference";
 import basicAuth from "express-basic-auth";
 import helmet from "helmet";
 import { MetricService } from "@/infra/prometheus/metric.service";
@@ -12,7 +11,7 @@ export function configureSwagger(app: INestApplication) {
   app.use(
     ["/doc", "/doc-json", "/doc-yaml"],
     basicAuth({
-      users: { admin: "novasenha" },
+      users: { admin: "admin" }, //  { usuario: senha}
       challenge: true,
       realm: "GBM-SWAGGER",
     }),
@@ -33,26 +32,16 @@ export function configureSwagger(app: INestApplication) {
         default: "pt-br",
       },
     })
-
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  app.use(
-    "/doc",
-    apiReference({
-      content: document,
-      theme: "default",
-      layout: "classic",
-      title: "Template Backend API - Documentação",
-      cdn: "https://cdn.jsdelivr.net/npm/@scalar/api-reference",
-      operationsSorter: "method",
-      defaultHttpClient: {
-        targetKey: "node",
-        clientKey: "axios",
-      },
-    }),
-  );
+  SwaggerModule.setup("docs", app, document, {
+    swaggerOptions: {
+      tagsSorter: "alpha",
+      operationsSorter: "alpha",
+    },
+  });
 }
 
 export function setGlobalPrefix(app: INestApplication) {
@@ -77,13 +66,5 @@ export function setGlobalInterceptors(app: INestApplication) {
 
 export function setSecurityHeaders(app: INestApplication) {
   app.getHttpAdapter().getInstance().disable("x-powered-by");
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          scriptSrc: ["https://cdn.jsdelivr.net/npm/@scalar/api-reference"],
-        },
-      },
-    }),
-  );
+  app.use(helmet());
 }
