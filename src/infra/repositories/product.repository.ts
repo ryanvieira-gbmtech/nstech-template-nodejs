@@ -19,6 +19,16 @@ export class ProductRepository {
     return products;
   }
 
+  async findByHashId(hashId: string) {
+    const product = await this.db
+      .selectFrom("product")
+      .where("externalId", "=", hashId)
+      .selectAll()
+      .executeTakeFirst();
+
+    return product;
+  }
+
   async create(data: NewProduct) {
     return this.db.insertInto("product").values(data).returningAll().executeTakeFirstOrThrow();
   }
@@ -29,5 +39,9 @@ export class ProductRepository {
       .set(data)
       .where("externalId", "=", hashId)
       .executeTakeFirstOrThrow();
+  }
+
+  async delete(hashId: string) {
+    await this.db.deleteFrom("product").where("externalId", "=", hashId).executeTakeFirstOrThrow();
   }
 }

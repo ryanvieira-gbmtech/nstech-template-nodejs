@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -44,5 +45,12 @@ export class ExampleController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateProduct(@Param("hashId") hashId: string, @Body() data: CreateProductRequestDTO) {
     await this.exampleService.updateProduct(hashId, data);
+  }
+
+  @Delete(":hashId")
+  @ApiOperation({ summary: "Deleta um produto" })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteProduct(@Param("hashId") hashId: string) {
+    await this.exampleService.deleteProduct(hashId);
   }
 }

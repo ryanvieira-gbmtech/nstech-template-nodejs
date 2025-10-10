@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { ProductRepository } from "@/infra/repositories/product.repository";
 import {
   CreateProductRequestDTO,
@@ -24,8 +24,18 @@ export class ExampleService {
   }
 
   async updateProduct(hashId: string, data: CreateProductRequestDTO) {
+    const product = await this.productRepository.findByHashId(hashId);
+
+    if (!product) {
+      throw new NotFoundException("Product not found");
+    }
+
     await this.productRepository.update(hashId, {
       name: data.name,
     });
+  }
+
+  async deleteProduct(hashId: string) {
+    await this.productRepository.delete(hashId);
   }
 }
