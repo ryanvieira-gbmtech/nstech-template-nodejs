@@ -6,6 +6,7 @@ const config: Config = {
   passWithNoTests: true,
   noStackTrace: true,
   collectCoverage: false,
+  cache: true,
   maxWorkers: 4,
   transform: { ".+\\.ts$": "@swc/jest" },
   testEnvironment: "node",
