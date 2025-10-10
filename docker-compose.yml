@@ -19,31 +19,8 @@ services:
       timeout: 10s
       retries: 3
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: gbm-app
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/gbm_app
-      - JWT_SECRET=secret
-      - PORT=3000
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - gbm-network
-    volumes:
-      - ./logs:/app/logs
-
 volumes:
   postgres_data:
-    driver: local
-  redis_data:
     driver: local
 
 networks:
