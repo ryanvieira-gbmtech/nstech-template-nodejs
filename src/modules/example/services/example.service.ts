@@ -36,6 +36,12 @@ export class ExampleService {
   }
 
   async deleteProduct(hashId: string) {
+    const product = await this.productRepository.findByHashId(hashId);
+
+    if (!product) {
+      throw new NotFoundException("Product not found");
+    }
+
     await this.productRepository.delete(hashId);
   }
 }
