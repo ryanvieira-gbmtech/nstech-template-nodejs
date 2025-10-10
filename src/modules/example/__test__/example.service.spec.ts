@@ -53,4 +53,28 @@ describe("ExampleService", () => {
 
     expect(productRepository.update).not.toHaveBeenCalled();
   });
+
+  it("should delete a product", async () => {
+    const hashId = "someHashId";
+
+    productRepository.findByHashId.mockResolvedValue({
+      id: 1 as ProductId,
+      name: "Product to be deleted",
+      externalId: hashId,
+    });
+
+    await service.deleteProduct(hashId);
+
+    expect(productRepository.delete).toHaveBeenCalledWith(hashId);
+  });
+
+  it("should throw an error when deleting a non-existing product", async () => {
+    const hashId = "nonExistingHashId";
+
+    productRepository.findByHashId.mockResolvedValue(undefined);
+
+    await expect(service.deleteProduct(hashId)).rejects.toThrow(NotFoundException);
+
+    expect(productRepository.delete).not.toHaveBeenCalled();
+  });
 });
