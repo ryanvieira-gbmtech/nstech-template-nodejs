@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude, Expose } from "class-transformer";
 
-export class FindTerminalShiftsResponseDTO {
+export class FindProductsResponseDTO {
   @Exclude() // vamos supor que o id não é necessário na resposta
   id!: number;
 
@@ -11,9 +11,5 @@ export class FindTerminalShiftsResponseDTO {
 
   @ApiProperty({ example: "01:00", description: "Hora de início do turno" })
   @Expose()
-  startTime!: string;
-
-  @ApiProperty({ example: "07:00", description: "Hora de término do turno" })
-  @Expose()
-  endTime!: string;
+  externalId!: string;
 }
