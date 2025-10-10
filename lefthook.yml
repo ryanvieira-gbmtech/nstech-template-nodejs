@@ -5,6 +5,7 @@ pre-commit:
       run: npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off --unsafe {staged_files}
       stage_fixed: true
 
-    "run tests":
-      run: npm run test -- --findRelatedTests {staged_files}
-      glob: "*.{js,ts}"
+pre-push:
+  commands:
+    "run all tests":
+      run: npm run test
