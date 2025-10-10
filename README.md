@@ -147,7 +147,9 @@ import Database from "@/infra/database/schema/Database";
 import { UsersId } from "@/infra/database/schema/public/Users";
 import { Repository } from "./interfaces";
 
-export class UserRepository extends Repository<Database>(DATABASE_CONNECTION) {
+export class UserRepository {
+  constructor(@Inject(DATABASE_CONNECTION) private db: Kysely<Database>) {}
+
   async findById(id: UsersId) {
     return await this.db
       .withSchema("public")
