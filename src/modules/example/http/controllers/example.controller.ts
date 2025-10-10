@@ -1,20 +1,23 @@
-import { Controller, Get, SerializeOptions } from "@nestjs/common";
+import { Controller, Get, Query, SerializeOptions } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ExampleService } from "../../services/example.service";
-import { FindTerminalShiftsResponseDTO } from "./dto/example-response";
+import { FindProductsRequestDTO } from "./dto/example-request";
+import { FindProductsResponseDTO } from "./dto/example-response";
 
 @ApiTags("example")
 @Controller("example")
 export class ExampleController {
-  constructor(readonly _exampleService: ExampleService) {}
+  constructor(readonly exampleService: ExampleService) {}
 
-  @Get(":terminalId/shifts")
-  @ApiOperation({ summary: "Busca turnos do terminal" })
+  @Get()
+  @ApiOperation({ summary: "Busca todos os produtos" })
   @ApiOkResponse({
-    type: FindTerminalShiftsResponseDTO,
+    type: FindProductsResponseDTO,
     isArray: true,
-    description: "Lista de turnos do terminal",
+    description: "Lista de produtos",
   })
-  @SerializeOptions({ type: FindTerminalShiftsResponseDTO })
-  async findTerminalShifts() {}
+  @SerializeOptions({ type: FindProductsResponseDTO })
+  async findProducts(@Query() filter: FindProductsRequestDTO) {
+    return await this.exampleService.findProducts(filter);
+  }
 }
