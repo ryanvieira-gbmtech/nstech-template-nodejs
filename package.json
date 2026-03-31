@@ -14,7 +14,9 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "test": "jest --config ./jest.config.ts",
-    "lefthook": "lefthook install"
+    "lefthook": "lefthook install",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.907.0",
