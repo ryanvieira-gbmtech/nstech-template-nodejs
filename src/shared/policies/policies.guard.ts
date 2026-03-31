@@ -38,15 +38,7 @@ export class PoliciesGuard implements CanActivate {
       });
     }
 
-    let result:
-      | Awaited<ReturnType<typeof this.jwtValidator.validateAudience>>
-      | Awaited<ReturnType<typeof this.jwtValidator.validateRole>>;
-
-    if (!policy.role) {
-      result = await this.jwtValidator.validateAudience(authHeader, policy.audience);
-    } else {
-      result = await this.jwtValidator.validateRole(authHeader, policy.audience, policy.role);
-    }
+    const result = await this.validateAgainstPolicy(authHeader, policy);
 
     if (!result.success && result.error) {
       const { httpStatus, ...body } = result.error;
@@ -56,5 +48,11 @@ export class PoliciesGuard implements CanActivate {
     }
 
     return result.success;
+  }
+
+  private async validateAgainstPolicy(authHeader: string, policy: PolicyMetadata) {
+    return policy.role
+      ? await this.jwtValidator.validateRole(authHeader, policy.audience, policy.role)
+      : await this.jwtValidator.validateAudience(authHeader, policy.audience);
   }
 }
