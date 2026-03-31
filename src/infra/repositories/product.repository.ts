@@ -1,20 +1,28 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { isNotEmpty } from "class-validator";
+import { Injectable } from "@nestjs/common";
 
-import { DATABASE_CONNECTION } from "../database/database.module";
-import type { Prisma, PrismaClient, Product } from "../database/generated/prisma/client";
+import type { Prisma, Product } from "../database/generated/prisma/client";
+import { PrismaService } from "../database/prisma.service";
 
 export type NewProduct = Pick<Prisma.ProductCreateInput, "externalId" | "name">;
 
 @Injectable()
 export class ProductRepository {
-  constructor(@Inject(DATABASE_CONNECTION) private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async findAll(filter: Partial<Pick<Product, "name">>) {
+    const where: Prisma.ProductWhereInput = {
+      ...(filter.name?.trim()
+        ? {
+            name: {
+              contains: filter.name.trim(),
+              mode: "insensitive",
+            },
+          }
+        : {}),
+    };
+
     return this.prisma.product.findMany({
-      where: isNotEmpty(filter.name)
-        ? { name: { contains: filter.name, mode: "insensitive" } }
-        : undefined,
+      where,
     });
   }
 
