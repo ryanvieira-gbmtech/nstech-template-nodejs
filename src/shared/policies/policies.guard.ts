@@ -25,8 +25,6 @@ export class PoliciesGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    console.log(policy);
-
     if (!policy) return true;
 
     const request = context.switchToHttp().getRequest<Request>();
@@ -40,16 +38,23 @@ export class PoliciesGuard implements CanActivate {
       });
     }
 
-    const result = await this.jwtValidator.validateRole(authHeader, policy.audience, policy.role);
+    let result:
+      | Awaited<ReturnType<typeof this.jwtValidator.validateAudience>>
+      | Awaited<ReturnType<typeof this.jwtValidator.validateRole>>;
+
+    if (!policy.role) {
+      result = await this.jwtValidator.validateAudience(authHeader, policy.audience);
+    } else {
+      result = await this.jwtValidator.validateRole(authHeader, policy.audience, policy.role);
+    }
 
     if (!result.success && result.error) {
       const { httpStatus, ...body } = result.error;
-
       if (httpStatus === 401) throw new UnauthorizedException(body);
 
       throw new ForbiddenException(body);
     }
 
-    return true;
+    return result.success;
   }
 }
