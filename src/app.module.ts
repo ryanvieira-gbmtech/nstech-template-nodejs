@@ -6,7 +6,6 @@ import { SentryModule } from "@sentry/nestjs/setup";
 import { PrometheusModule } from "@willsoto/nestjs-prometheus";
 import { EnvModule } from "./config/env/env.module";
 import { validate } from "./config/env/env.validation";
-import { DatabaseModule } from "./infra/database/database.module";
 import { MetricController } from "./infra/prometheus/metric.controller";
 import { MetricModule } from "./infra/prometheus/metric.module";
 import { ExampleModule } from "./modules/example/example.module";
@@ -29,7 +28,6 @@ import { JwtAuthGuard } from "./shared/auth/jwt-auth.guard";
     }),
     MetricModule,
     EnvModule,
-    DatabaseModule,
     AuthModule,
     ExampleModule,
   ],
