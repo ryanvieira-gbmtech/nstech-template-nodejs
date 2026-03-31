@@ -12,6 +12,8 @@ import { MetricModule } from "./infra/prometheus/metric.module";
 import { ExampleModule } from "./modules/example/example.module";
 import { AuthModule } from "./shared/auth/auth.module";
 import { JwtAuthGuard } from "./shared/auth/jwt-auth.guard";
+import { PoliciesGuard } from "./shared/policies/policies.guard";
+import { PoliciesModule } from "./shared/policies/policies.module";
 
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { JwtAuthGuard } from "./shared/auth/jwt-auth.guard";
     MetricModule,
     EnvModule,
     AuthModule,
+    PoliciesModule,
     HealthModule,
     ExampleModule,
   ],
@@ -37,6 +40,10 @@ import { JwtAuthGuard } from "./shared/auth/jwt-auth.guard";
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PoliciesGuard,
     },
   ],
 })
