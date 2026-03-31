@@ -13,7 +13,7 @@ export function configureSwagger(app: INestApplication) {
     basicAuth({
       users: { admin: "admin" }, //  { usuario: senha}
       challenge: true,
-      realm: "GBM-SWAGGER",
+      realm: "NSTECH-SWAGGER",
     }),
   );
 

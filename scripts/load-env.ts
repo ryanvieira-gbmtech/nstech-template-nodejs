@@ -3,7 +3,7 @@ import "dotenv/config";
 import { statSync, writeFile } from "node:fs";
 import path from "node:path";
 import { GetSecretValueCommand, SecretsManagerClient } from "@aws-sdk/client-secrets-manager";
-import { fromIni, fromInstanceMetadata } from "@aws-sdk/credential-providers";
+import { fromIni } from "@aws-sdk/credential-providers";
 
 export async function loadEnvs() {
   const envPath = path.resolve(process.cwd(), ".env");
@@ -14,19 +14,9 @@ export async function loadEnvs() {
     return;
   }
 
-  let credentials: any = null;
-
-  const onEC2 = process.env.EC2?.toString() === "true";
-
-  if (onEC2) {
-    console.log("Running on EC2 instance, using instance metadata for credentials.");
-    credentials = fromInstanceMetadata();
-  } else {
-    console.log("Running locally or in a non-EC2 environment, using fromIni for credentials.");
-    credentials = fromIni({
-      profile: "gbm-profile",
-    });
-  }
+  const credentials = fromIni({
+    profile: "nstech-profile",
+  });
 
   const client = new SecretsManagerClient({
     region: "us-east-1",

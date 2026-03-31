@@ -1,8 +1,8 @@
 {
-  "name": "gbm-app-template-backend",
+  "name": "nstech-template-nodejs",
   "version": "0.0.1",
   "description": "",
-  "author": "Ryan Vieira Souza <ryan.vieira@gbmlogistica.com.br>",
+  "author": "Ryan Vieira Souza <ryan.vieira@nstech.com.br>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
