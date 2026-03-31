@@ -1,7 +1,8 @@
-import { Global, Logger, Module } from "@nestjs/common";
-import { CamelCasePlugin, Kysely, PostgresDialect } from "kysely";
-import { Pool } from "pg";
+import { Global, Module } from "@nestjs/common";
+import { PrismaPg } from "@prisma/adapter-pg";
+
 import { EnvService } from "@/config/env/env.service";
+import { PrismaClient } from "./generated/prisma/client";
 
 export const DATABASE_CONNECTION = "DATABASE_CONNECTION";
 
@@ -11,23 +12,10 @@ export const DATABASE_CONNECTION = "DATABASE_CONNECTION";
     {
       provide: DATABASE_CONNECTION,
       useFactory: async (envService: EnvService) => {
-        const dialect = new PostgresDialect({
-          pool: new Pool({
-            connectionString: envService.get("DATABASE_URL"),
-          }),
-        });
+        const adapter = new PrismaPg({ connectionString: envService.get("DATABASE_URL") });
+        const prisma = new PrismaClient({ adapter });
 
-        const db = new Kysely({
-          dialect,
-          plugins: [new CamelCasePlugin()],
-          log: ["error"],
-        });
-
-        const logger = new Logger("DatabaseModule");
-
-        logger.log("Successfully connected to database");
-
-        return db;
+        return prisma;
       },
       inject: [EnvService],
     },
