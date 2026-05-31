@@ -55,3 +55,18 @@ export function diffInMinutes(startDate: Date, endDate: Date) {
 
   return Math.abs(minutes);
 }
+
+export function toDateString(date: Date): string {
+  return date.toISOString().split("T")[0];
+}
+
+export function resolveTerminalDayRange(
+  cycle: { dayStartTime: string; dayEndTime: string; timezone: string },
+  startDate: Date | string,
+  endDate: Date | string,
+): { startDate: Date; endDate: Date } {
+  return {
+    startDate: formatWithTime(startDate, cycle.dayStartTime, cycle.timezone),
+    endDate: formatWithTime(addOneDay(endDate, endDate).endDate, cycle.dayEndTime, cycle.timezone),
+  };
+}
